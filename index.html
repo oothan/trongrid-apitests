@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CHECK WSS</title>
+  <script>
+    let websocket = new WebSocket("ws://localhost:9000/testws");
+    let el;
+
+    websocket.onmessage = (event) => {
+      el = document.getElementById('time');
+      el.innerHTML = 'Current time on server is ' + event.data;
+      heartbeat();
+    }
+
+    function heartbeat() {
+      if (!websocket) return;
+      if (websocket.readyState !== 1) return;
+      websocket.send("heartbeat");
+      setTimeout(heartbeat, 500);
+    }
+
+  </script>
+</head>
+<body>
+
+</body>
+</html>
