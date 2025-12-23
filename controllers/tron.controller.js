@@ -14,7 +14,6 @@ exports.getTRXUSDTBalance = async (req, res) => {
         const contract = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t";
 
         // set the owner address
-        let isAddress = tronWeb.
     } catch (e) {
         res.json({
             err_code: 500,
