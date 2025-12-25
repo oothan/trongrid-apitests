@@ -21,7 +21,16 @@ exports.getTRXUSDTBalance = async (req, res) => {
                 err_msg: "to_address is invalid"
             })
         }
-        tronWeb.setAddress(req.body.address);
+
+        const { result } = await tronWeb.transactionBuilder.triggerConstantContract(
+            contractAddr,
+            "balanceOf(address)",
+            {},
+            [{type: 'address', value: req.body.address}]
+        );
+
+        // parse the result
+        const balanceHex = result.constant_result[0];
 
         // sign contract
         let contract = await tronWeb.contract().at(contractAddr);
