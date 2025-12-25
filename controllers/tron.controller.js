@@ -1,6 +1,6 @@
 const db = require("../models/models");
-const tronWeb = require("../tronweb/tronweb");
-const web3 = require("web3");
+const { tronWeb } = require("../tronweb/tronweb");
+const { web3 } = require("web3");
 const assert = require("assert");
 
 exports.getTRXUSDTBalance = async (req, res) => {

@@ -7,8 +7,10 @@ const httpProvider = TronWeb.providers.HttpProvider;
 const tronNode = new httpProvider(fullNodeUrl);
 const etherNode = new httpProvider(fullNodeUrl);
 const eventServer = new httpProvider(fullNodeUrl);
+const tronWeb = new TronWeb(tronNode, etherNode, eventServer);
 
-const tronWeb = new TronWeb(tronNode, etherNode, eventServer, apiKey);
-tronWeb.setHeader({"TRON-PRO-API-KEY": apiKey});
+if (apiKey) {
+    tronWeb.setHeader({"TRON-PRO-API-KEY": apiKey});
+}
 
 module.exports = tronWeb;
