@@ -3,6 +3,15 @@ const { tronWeb } = require("../tronweb/tronweb");
 const { web3 } = require("web3");
 const assert = require("assert");
 
+// Minimal TRC20 ABI with BalanceOf
+const ABI = [{
+    "contract": true,
+    "inputs": [{"name": "who", "type": "address"}],
+    "name": "balanceOf",
+    "outputs": [{"name": "", "type": "uint256"}],
+    "type": "Function"
+}];
+
 exports.getTRXUSDTBalance = async (req, res) => {
     try {
         if (!req.body.address) {
@@ -11,7 +20,6 @@ exports.getTRXUSDTBalance = async (req, res) => {
                 err_msg: "to_address field is required"
             });
         }
-        const contractAddr = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t";
 
         // set the owner address
         let isAddress = await tronWeb.isAddress(req.body.address);
@@ -21,6 +29,10 @@ exports.getTRXUSDTBalance = async (req, res) => {
                 err_msg: "to_address is invalid"
             })
         }
+
+        const contractAddr = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t";
+        const contractT = await tronWeb.contract(ABI, contractAddr);
+        const balance = await contractT.balanceOf(req.body.address).call();
 
         const { result } = await tronWeb.transactionBuilder.triggerConstantContract(
             contractAddr,
