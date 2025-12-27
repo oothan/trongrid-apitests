@@ -31,8 +31,6 @@ exports.getTRXUSDTBalance = async (req, res) => {
         }
 
         const contractAddr = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t";
-        const contractT = await tronWeb.contract(ABI, contractAddr);
-        const balance = await contractT.balanceOf(req.body.address).call();
 
         const { result } = await tronWeb.transactionBuilder.triggerConstantContract(
             contractAddr,
@@ -41,12 +39,10 @@ exports.getTRXUSDTBalance = async (req, res) => {
             [{type: 'address', value: req.body.address}]
         );
 
-        // parse the result
-        const balanceHex = result.constant_result[0];
+        if (!result || !result.result.valueOf()) {
+            throw new Error('Contract call failed');
+        }
 
-        // sign contract
-        let contract = await tronWeb.contract().at(contractAddr);
-        let balance = await contract.balanceOf(req.body.address).call();
     } catch (e) {
         res.json({
             err_code: 500,
